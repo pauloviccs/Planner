@@ -74,7 +74,12 @@ function FormularioEntrar() {
         {(erroGeral || erroParam) && (
           <div className="mb-4 flex items-center gap-2 p-3 rounded-[var(--raio-md)] bg-[var(--perigo-fundo)] text-[var(--perigo)] text-xs border border-[var(--perigo)]/20">
             <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{erroGeral || "O link acessado é inválido ou já expirou."}</span>
+            <span>
+              {erroGeral ||
+                (erroParam === "codigo_invalido"
+                  ? "Este link de confirmação já foi utilizado ou expirou. Se o seu e-mail já foi confirmado, basta entrar com sua senha."
+                  : erroParam)}
+            </span>
           </div>
         )}
 

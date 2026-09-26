@@ -125,7 +125,7 @@ export async function recuperarSenhaAcao(email: string): Promise<RespostaAcao> {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   const { error } = await supabase.auth.resetPasswordForEmail(validacao.data.email, {
-    redirectTo: `${appUrl}/recuperar/redefinir`,
+    redirectTo: `${appUrl}/callback?next=/recuperar/redefinir`,
   });
 
   if (error) {
