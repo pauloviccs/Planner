@@ -23,13 +23,13 @@ dist/
 credentials/
 
 # === Configurações & Cortex de Agentes (.agent, CLAUDE, AGENTS) ===
-.agent/
+/.agent/
 CLAUDE.md
 AGENTS.md
 
-# === Documentação Interna & Supabase Local ===
-docs/
-supabase/
+# === Documentação Interna & Supabase Local (apenas raiz) ===
+/docs/
+/supabase/
 
 # === IDE ===
 .vscode/
