@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* ==============================================
+   VICCS Planner — Design System Tokens
+   ============================================== */
+
+/* --- Tema Escuro (padrão) --- */
+:root,
+[data-tema="escuro"] {
+  color-scheme: dark;
+
+  /* Superfícies */
+  --background: hsl(225 15% 6%);
+  --surface: hsl(225 14% 10%);
+  --surface-elevada: hsl(225 13% 13%);
+  --surface-glass: hsla(225 20% 14% / 0.6);
+  --surface-glass-borda: hsla(0 0% 100% / 0.08);
+
+  /* Texto */
+  --foreground: hsl(210 20% 95%);
+  --foreground-muted: hsl(215 15% 55%);
+  --foreground-sutil: hsl(215 12% 40%);
+
+  /* Bordas e separadores */
+  --border: hsla(0 0% 100% / 0.08);
+  --border-hover: hsla(0 0% 100% / 0.14);
+
+  /* Interação */
+  --accent: hsl(220 90% 62%);
+  --accent-hover: hsl(220 90% 56%);
+  --accent-foreground: hsl(0 0% 100%);
+  --focus-ring: hsla(220 90% 62% / 0.5);
+
+  /* Status */
+  --sucesso: hsl(142 60% 50%);
+  --sucesso-fundo: hsla(142 60% 50% / 0.12);
+  --aviso: hsl(38 92% 55%);
+  --aviso-fundo: hsla(38 92% 55% / 0.12);
+  --perigo: hsl(0 72% 58%);
+  --perigo-fundo: hsla(0 72% 58% / 0.12);
+  --info: hsl(200 80% 55%);
+  --info-fundo: hsla(200 80% 55% / 0.12);
+
+  /* Glass */
+  --glass-desfoque: 16px;
+  --glass-saturacao: 1.2;
+
+  /* Sombras */
+  --sombra-sm: 0 1px 2px hsla(0 0% 0% / 0.3);
+  --sombra-md: 0 4px 12px hsla(0 0% 0% / 0.35);
+  --sombra-lg: 0 8px 32px hsla(0 0% 0% / 0.45);
+
+  /* Formas */
+  --raio-sm: 6px;
+  --raio-md: 10px;
+  --raio-lg: 16px;
+  --raio-completo: 9999px;
+
+  /* Espaçamento */
+  --espaco-1: 4px;
+  --espaco-2: 8px;
+  --espaco-3: 12px;
+  --espaco-4: 16px;
+  --espaco-5: 20px;
+  --espaco-6: 24px;
+  --espaco-8: 32px;
+  --espaco-10: 40px;
+  --espaco-12: 48px;
+  --espaco-16: 64px;
+
+  /* Tipografia */
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.8125rem;
+  --texto-base: 0.875rem;
+  --texto-md: 1rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.5rem;
+  --texto-2xl: 2rem;
+
+  --leading-apertado: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxado: 1.75;
+
+  /* Animação */
+  --duracao-rapida: 120ms;
+  --duracao-normal: 200ms;
+  --duracao-lenta: 350ms;
+  --easing-padrao: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Sidebar */
+  --sidebar-largura: 260px;
+  --sidebar-largura-recolhida: 52px;
+  --topbar-altura: 48px;
+}
+
+/* --- Tema Claro --- */
+[data-tema="claro"] {
+  color-scheme: light;
+
+  --background: hsl(220 14% 96%);
+  --surface: hsl(0 0% 100%);
+  --surface-elevada: hsl(0 0% 100%);
+  --surface-glass: hsla(0 0% 100% / 0.7);
+  --surface-glass-borda: hsla(0 0% 0% / 0.06);
+
+  --foreground: hsl(225 15% 12%);
+  --foreground-muted: hsl(215 12% 45%);
+  --foreground-sutil: hsl(215 10% 65%);
+
+  --border: hsla(0 0% 0% / 0.08);
+  --border-hover: hsla(0 0% 0% / 0.14);
+
+  --accent: hsl(220 85% 52%);
+  --accent-hover: hsl(220 85% 45%);
+  --accent-foreground: hsl(0 0% 100%);
+  --focus-ring: hsla(220 85% 52% / 0.4);
+
+  --sucesso: hsl(142 55% 40%);
+  --sucesso-fundo: hsla(142 55% 40% / 0.08);
+  --aviso: hsl(38 85% 48%);
+  --aviso-fundo: hsla(38 85% 48% / 0.08);
+  --perigo: hsl(0 65% 50%);
+  --perigo-fundo: hsla(0 65% 50% / 0.08);
+  --info: hsl(200 75% 45%);
+  --info-fundo: hsla(200 75% 45% / 0.08);
+
+  --glass-desfoque: 20px;
+  --glass-saturacao: 1;
+
+  --sombra-sm: 0 1px 3px hsla(0 0% 0% / 0.06);
+  --sombra-md: 0 4px 12px hsla(0 0% 0% / 0.08);
+  --sombra-lg: 0 8px 32px hsla(0 0% 0% / 0.12);
+}
+
+/* ==============================================
+   Classes Utilitárias do Design System
+   ============================================== */
+
+/* Reset e base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--texto-base);
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+}
+
+/* Focus visível acessível */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--raio-sm);
+}
+
+/* Seleção */
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: var(--raio-completo);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-sutil);
+}
+
+/* Materiais */
+.superficie-glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(var(--glass-desfoque)) saturate(var(--glass-saturacao));
+  -webkit-backdrop-filter: blur(var(--glass-desfoque)) saturate(var(--glass-saturacao));
+  border: 1px solid var(--surface-glass-borda);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .superficie-glass {
+    background: var(--surface);
+  }
+}
+
+.superficie-painel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.superficie-elevada {
+  background: var(--surface-elevada);
+  border: 1px solid var(--border);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-md);
+}
+
+/* Transições */
+.transicao-cores {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: var(--duracao-normal);
+  transition-timing-function: var(--easing-padrao);
+}
+
+.transicao-transform {
+  transition-property: transform, opacity;
+  transition-duration: var(--duracao-normal);
+  transition-timing-function: var(--easing-padrao);
+}
+
+/* Respeitar redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==============================================
+   Tailwind v4 — Theme Extensions
+   ============================================== */
+
+@theme {
+  /* Cores do design system como utilitários Tailwind */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-elevada: var(--surface-elevada);
+  --color-surface-glass: var(--surface-glass);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-sutil: var(--foreground-sutil);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-sucesso: var(--sucesso);
+  --color-sucesso-fundo: var(--sucesso-fundo);
+  --color-aviso: var(--aviso);
+  --color-aviso-fundo: var(--aviso-fundo);
+  --color-perigo: var(--perigo);
+  --color-perigo-fundo: var(--perigo-fundo);
+  --color-info: var(--info);
+  --color-info-fundo: var(--info-fundo);
+
+  /* Raios */
+  --radius-sm: var(--raio-sm);
+  --radius-md: var(--raio-md);
+  --radius-lg: var(--raio-lg);
+  --radius-full: var(--raio-completo);
+
+  /* Sombras */
+  --shadow-sm: var(--sombra-sm);
+  --shadow-md: var(--sombra-md);
+  --shadow-lg: var(--sombra-lg);
+}
