@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
+import Image from "@tiptap/extension-image";
 import {
   Bold,
   Italic,
@@ -23,9 +24,13 @@ import {
   AlertCircle,
   Star,
   Trash2,
+  Image as ImageIcon,
 } from "lucide-react";
 import { atualizarPaginaAcao, excluirPaginaAcao } from "@/lib/acoes/pagina-acoes";
 import { useRouter } from "next/navigation";
+import { criarClienteNavegador } from "@/lib/supabase/cliente";
+import { registrarAnexoAcao } from "@/lib/acoes/anexo-acoes";
+import { GerenciadorAnexos } from "@/componentes/compartilhado/gerenciador-anexos";
 
 interface PropriedadesEditorPrincipal {
   paginaId: string;
@@ -67,6 +72,10 @@ export function EditorPrincipal({
       TaskItem.configure({
         nested: true,
       }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
     ],
     content: conteudoInicial || "<p></p>",
     editorProps: {
@@ -79,6 +88,52 @@ export function EditorPrincipal({
       agendarSalvamento({ conteudo: editor.getJSON() });
     },
   });
+
+  const [fazendoUploadImagem, setFazendoUploadImagem] = React.useState(false);
+  const inputImagemRef = React.useRef<HTMLInputElement>(null);
+
+  const lidarComUploadImagem = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const arquivo = e.target.files?.[0];
+    if (!arquivo || !editor) return;
+
+    setFazendoUploadImagem(true);
+    const supabase = criarClienteNavegador();
+    const nomeLimpo = arquivo.name.replace(/[^a-zA-Z0-9.-]/g, "_").slice(0, 50);
+    const caminhoStorage = `${workspaceId}/pagina/${paginaId}/${Date.now()}_${nomeLimpo}`;
+
+    try {
+      const { error: erroUpload } = await supabase.storage
+        .from("workspace-arquivos")
+        .upload(caminhoStorage, arquivo);
+
+      if (erroUpload) throw new Error(erroUpload.message);
+
+      const { data: dataUrl } = supabase.storage
+        .from("workspace-arquivos")
+        .getPublicUrl(caminhoStorage);
+
+      const urlPublica = dataUrl?.publicUrl || "";
+
+      editor.chain().focus().setImage({ src: urlPublica, alt: arquivo.name }).run();
+
+      await registrarAnexoAcao({
+        workspaceId,
+        recursoTipo: "pagina",
+        recursoId: paginaId,
+        nomeArquivo: arquivo.name,
+        tamanhoBytes: arquivo.size,
+        mimeType: arquivo.type || "image/png",
+        caminhoStorage,
+        urlPublica,
+      });
+    } catch (err: any) {
+      console.error("Erro ao subir imagem no editor:", err);
+      alert("Falha ao fazer upload da imagem: " + (err?.message || ""));
+    } finally {
+      setFazendoUploadImagem(false);
+      if (inputImagemRef.current) inputImagemRef.current.value = "";
+    }
+  };
 
   // Função para salvar alterações com debounce
   const agendarSalvamento = (dados: {
@@ -285,6 +340,28 @@ export function EditorPrincipal({
           >
             <Minus className="h-3.5 w-3.5" />
           </button>
+
+          <button
+            type="button"
+            onClick={() => inputImagemRef.current?.click()}
+            disabled={fazendoUploadImagem}
+            className="p-1.5 rounded text-xs text-[var(--foreground-muted)] hover:text-[var(--accent)] hover:bg-[var(--surface-elevada)] transition-colors cursor-pointer disabled:opacity-50"
+            title="Inserir Imagem (Upload Supabase)"
+          >
+            {fazendoUploadImagem ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <ImageIcon className="h-3.5 w-3.5" />
+            )}
+          </button>
+
+          <input
+            ref={inputImagemRef}
+            type="file"
+            accept="image/*"
+            onChange={lidarComUploadImagem}
+            className="hidden"
+          />
         </div>
 
         {/* Lado Direito: Status de Salvamento e Ações da Página */}
@@ -351,6 +428,15 @@ export function EditorPrincipal({
       {/* Conteúdo Principal do Editor */}
       <div className="superficie-glass p-6 md:p-8 rounded-[var(--raio-lg)] border border-[var(--border)] shadow-[var(--sombra-sm)]">
         <EditorContent editor={editor} />
+      </div>
+
+      {/* Seção de Arquivos e Anexos da Página */}
+      <div className="superficie-glass p-6 rounded-[var(--raio-lg)] border border-[var(--border)] shadow-[var(--sombra-sm)]">
+        <GerenciadorAnexos
+          workspaceId={workspaceId}
+          recursoTipo="pagina"
+          recursoId={paginaId}
+        />
       </div>
     </div>
   );

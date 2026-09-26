@@ -22,6 +22,8 @@ import { Botao } from "@/componentes/ui/botao";
 import { Input } from "@/componentes/ui/input";
 import { Rotulo } from "@/componentes/ui/rotulo";
 import { Badge } from "@/componentes/ui/badge";
+import { GerenciadorAnexos } from "@/componentes/compartilhado/gerenciador-anexos";
+import { GerenciadorDependencias } from "@/componentes/compartilhado/gerenciador-dependencias";
 
 interface PropriedadesDialogCartao {
   cartao: CartaoCompleto;
@@ -261,6 +263,24 @@ export function DialogCartao({
               </div>
             )}
           </div>
+
+          <div className="h-px bg-white/5 my-4" />
+
+          {/* Dependências e Bloqueios (Fase 5.2) */}
+          <GerenciadorDependencias
+            workspaceId={cartao.workspace_id}
+            cartaoId={cartao.id}
+            colunas={colunas}
+          />
+
+          <div className="h-px bg-white/5 my-4" />
+
+          {/* Anexos e Mídias no Supabase Storage (Fase 5.1) */}
+          <GerenciadorAnexos
+            workspaceId={cartao.workspace_id}
+            recursoTipo="cartao"
+            recursoId={cartao.id}
+          />
         </div>
 
         {/* Rodapé */}
